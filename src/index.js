@@ -1,20 +1,32 @@
 'use strict';
 
-const config = require('config');
+module.exports = Configurable;
 
+function Configurable(obj = {}) {
+  const settings = {};
 
-exports.fromEnv = {
-  HELLO() {
-    return process.env.HELLO;
+  if (!isObject(obj)) {
+    throw new Error('parameter must be an object');
   }
-};
 
-exports.fromConfig = {
-  hi() {
-    return config.get('hi');
-  },
+  Object.assign(obj, {
+    get(name) {
+      return settings[name];
+    },
+    set(name, value) {
+      if (isObject(name)) {
+        Object.keys(name).forEach(key => (settings[key] = name[key]));
+      } else {
+        settings[name] = value;
+      }
 
-  hello() {
-    return config.get('hello');
-  }
-};
+      return obj;
+    }
+  });
+
+  return obj;
+}
+
+function isObject(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]';
+}

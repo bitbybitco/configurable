@@ -1,19 +1,34 @@
 'use strict';
 
 const { expect } = require('chai');
-const { fromConfig, fromEnv } = require('../src');
+const Configurable = require('../src');
 
+describe('Configurable', function () {
+  it('should throw a error if param is not a object', function () {
+    const obj1 = Configurable();
 
-describe('Checking Environment Variable `HELLO`', function () {
-  it('should return value from environment variable', function () {
-    expect(fromEnv.HELLO()).to.be.equal('WORLD');
+    expect(obj1).to.have.all.keys(['get', 'set']);
+
+    expect(() => Configurable(null)).to.throw(Error);
+    expect(() => Configurable('null')).to.throw(Error);
+    expect(() => Configurable([])).to.throw(Error);
+    expect(() => Configurable(2)).to.throw(Error);
   });
 
-  it('should return value from config file', function () {
-    expect(fromConfig.hi()).to.be.equal('hi from config');
-  });
+  it('should make a object have get and set methods', function () {
+    const obj = {};
+    Configurable(obj);
 
-  it('should return value from custom environment variable', function () {
-    expect(fromConfig.hello()).to.be.equal('WORLD');
+    expect(obj).to.contain.all.keys(['get', 'set']);
+
+    obj.set('x', 1);
+
+    expect(obj.get('x')).to.be.equal(1);
+
+    obj.set({ x: 2, y: 3, z: 4 });
+
+    expect(obj.get('x')).to.be.equal(2);
+    expect(obj.get('y')).to.be.equal(3);
+    expect(obj.get('z')).to.be.equal(4);
   });
 });
