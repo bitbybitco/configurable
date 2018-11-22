@@ -7,7 +7,7 @@ describe('Configurable', function () {
   it('should throw a error if param is not a object', function () {
     const obj1 = Configurable();
 
-    expect(obj1).to.have.all.keys(['get', 'set']);
+    expect(obj1).to.contain.all.keys(['get', 'set']);
 
     expect(() => Configurable(null)).to.throw(Error);
     expect(() => Configurable('null')).to.throw(Error);
@@ -30,5 +30,23 @@ describe('Configurable', function () {
     expect(obj.get('x')).to.be.equal(2);
     expect(obj.get('y')).to.be.equal(3);
     expect(obj.get('z')).to.be.equal(4);
+  });
+
+  it('should make a object have enable/enabled and disable/disabled methods', function () {
+    const obj = {};
+    Configurable(obj);
+
+    expect(obj).to.contain.all.keys(['enable', 'enabled', 'disable', 'disabled']);
+
+    obj.enable('x');
+
+    expect(obj.get('x')).to.be.equal(true);
+    expect(obj.enabled('x')).to.be.equal(true);
+
+    obj.disable('x');
+
+    expect(obj.get('x')).to.be.equal(false);
+    expect(obj.disabled('x')).to.be.equal(true);
+    expect(obj.enabled('x')).to.be.equal(false);
   });
 });
