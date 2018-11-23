@@ -49,4 +49,21 @@ describe('Configurable', function () {
     expect(obj.disabled('x')).to.be.equal(true);
     expect(obj.enabled('x')).to.be.equal(false);
   });
+
+  it('should return a list of all settings', function () {
+    const obj = Configurable();
+    const settings = { x: 1, y: 2, z: 3 };
+
+    expect(obj).to.have.any.keys('listSettings');
+
+    obj.set(settings);
+    const objSettings = obj.listSettings();
+
+    expect(objSettings).not.be.equal(settings);
+    expect(objSettings).to.have.all.keys(['x', 'y', 'z']);
+
+    expect(objSettings).to.have.property('x', 1);
+    expect(objSettings).to.have.property('y', 2);
+    expect(objSettings).to.have.property('z', 3);
+  });
 });
