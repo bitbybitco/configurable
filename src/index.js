@@ -21,6 +21,18 @@ function Configurable(obj = {}) {
     },
 
     /**
+     * List all Settings
+     *
+     * @returns {object}
+     */
+    listSettings() {
+      const obj = Object.create(null);
+
+      Object.keys(settings).forEach(key => (obj[key] = settings[key]));
+      return obj;
+    },
+
+    /**
      * Set a value
      *
      * @param {string|object} name
